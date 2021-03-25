@@ -1,0 +1,23 @@
+version: '3.3'
+services:
+  flask:
+    build: ./flask
+    hostname: flask
+    container_name: flask
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    # restart: always
+    environment:
+      - APP_NAME=Feature_store
+    ports:
+      - 5000:5000
+      - 5050:5050
+  nginx:
+    build: ./nginx
+    hostname: nginx
+    container_name: nginx
+    # restart: always
+    depends_on: [flask]
+    ports:
+      - 20080:80
