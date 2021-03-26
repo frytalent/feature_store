@@ -1,5 +1,5 @@
 import flask
-from flask import Response
+from flask import Response, request
 import urllib.request
 import json
 import uuid
@@ -36,6 +36,10 @@ def home():
 
 @app.route('/ksql', methods=['POST'])
 def ksql():
+    content = request.json
+    print('content:', content)
+    #content['stream']
+    #content['table']
     # server config setting
     kafka_server = '172.16.43.68:9092'
     conf = {'bootstrap.servers': kafka_server,
@@ -43,7 +47,8 @@ def ksql():
             'auto.offset.reset': 'earliest'}
             #'print.key': True}
     consumer = Consumer(conf)
-    consumer.subscribe(['TBL_SUM_PAYMENTWD_TXN'])
+    consumer.subscribe([content['stream']])
+    #consumer.subscribe(['TBL_SUM_PAYMENTWD_TXN'])
     
     # start pull message 
     message = []
@@ -62,6 +67,7 @@ def ksql():
     
     query_keys = ','.join(["'%s'"%x for x in set(keys)])
     # query data from ksql api
+            
     data = {
             "ksql": "select * FROM TBL_SUM_PAYMENTWD_TXN where PaymentTransactionNo in (%s);"%query_keys,
             "streamsProperties": {}
