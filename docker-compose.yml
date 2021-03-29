@@ -12,7 +12,6 @@ services:
       - APP_NAME=Feature_store
     ports:
       - 5000:5000
-      - 5050:5050
   nginx:
     build: ./nginx
     hostname: nginx

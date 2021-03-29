@@ -69,7 +69,7 @@ def ksql():
     # query data from ksql api
             
     data = {
-            "ksql": "select * FROM TBL_SUM_PAYMENTWD_TXN where PaymentTransactionNo in (%s);"%query_keys,
+            "ksql": "select * FROM %s where PaymentTransactionNo in (%s);"%(content['stream'], query_keys),
             "streamsProperties": {}
     }
     
